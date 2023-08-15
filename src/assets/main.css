@@ -23,7 +23,9 @@ a,
     display: block;
   }
 
+/*TODO разобраться как сделать минимал ширину, чтобы при уменьшении он не вылетал хер пойми куда*/
   #app {
-    display: grid;
+    @apply grid;
+    grid-template-columns: 1fr 4fr;
   }
 }

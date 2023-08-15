@@ -1,40 +1,15 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import SideMenu from '../src/components/SideMenu.vue'
 import MainHeader from './components/MainHeader.vue'
 import MainView from './components/MainView.vue'
-
-
+import LogoPlace from "@/components/LogoPlace.vue";
 </script>
 
 <template>
-  <MainHeader>
-
-      fdfdffdsssssssssssssssssss
-  </MainHeader>
-
-  <SideMenu>
-      fdfdf
-
-  </SideMenu>
-    <MainView>
-      fdfdf
-
-  </MainView>
-
-<!--  <header>-->
-<!--    <div class="wrapper">-->
-<!--        <SideMenu>-->
-
-<!--        </SideMenu>-->
-<!--      <nav>-->
-<!--        <RouterLink to="/">Home</RouterLink>-->
-<!--        <RouterLink to="/about">About</RouterLink>-->
-<!--      </nav>-->
-<!--    </div>-->
-<!--  </header>-->
-<!--  <RouterView />-->
-
+  <LogoPlace/>
+  <MainHeader/>
+  <SideMenu/>
+  <MainView/>
 </template>
 
 <style scoped>

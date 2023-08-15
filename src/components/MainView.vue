@@ -4,13 +4,14 @@
 
 <template>
   <div class="main-menu">
-    <div class="h-5">MAIN VIEW</div>
+      <RouterView></RouterView>
   </div>
 </template>
 
 <style scoped>
 .main-menu {
     background-color: blue;
-    width: 10vh;
+    width: 100%;
+    height: 90vh;
 }
 </style>

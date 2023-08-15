@@ -3,6 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .back {
+    background-color: #EAEAEA;
+  }
+}
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
