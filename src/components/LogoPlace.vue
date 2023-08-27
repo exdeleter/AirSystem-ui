@@ -13,14 +13,14 @@
 @import "src/assets/base.css";
 
 .logo-place {
-    @apply back items-center flex bg-gray-200 pl-5 py-2 border-r-2 border-gray-500;
+    @apply back items-center flex pl-5 py-2 border-r-2 border-gray-500;
     color: black;
     width: 100%;
     height: 10vh;
 }
 
 .logo-place__header {
-    @apply p-5 text-3xl;
+    @apply p-5 text-xl;
     font-family: 'Black Ops One', sans-serif;
 }
 </style>

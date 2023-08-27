@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="logo-place">
+  <div class="aircrafts_view">
       <img style="max-height:100%; max-width:100%;" src="public/LOGO.svg" alt="logo">
       <h6 class="logo-place__header">AirSystem</h6>
   </div>
@@ -12,11 +12,8 @@
 <style scoped>
 @import "src/assets/base.css";
 
-.logo-place {
-    @apply back items-center flex bg-gray-200 pl-5 py-2 border-r-2 border-gray-500;
-    color: black;
-    width: 100%;
-    height: 10vh;
+.aircrafts_view {
+
 }
 
 .logo-place__header {

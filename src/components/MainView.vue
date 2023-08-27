@@ -8,9 +8,11 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="postcss">
+@import "src/assets/base.css";
+
 .main-menu {
-    background-color: blue;
+    @apply back;
     width: 100%;
     height: 90vh;
 }

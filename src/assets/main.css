@@ -26,6 +26,6 @@ a,
 /*TODO разобраться как сделать минимал ширину, чтобы при уменьшении он не вылетал хер пойми куда*/
   #app {
     @apply grid;
-    grid-template-columns: 1fr 4fr;
+    grid-template-columns: 1fr 5fr;
   }
 }

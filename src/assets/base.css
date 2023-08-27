@@ -7,6 +7,10 @@
   .back {
     background-color: #EAEAEA;
   }
+
+  .back-gray {
+    background-color: #F7F3F3;
+  }
 }
 
 :root {
