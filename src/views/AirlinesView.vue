@@ -2,6 +2,7 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import ASButton from "@/components/ASButton.vue";
 import {onMounted, ref} from 'vue';
+import Router from "@/router";
 
 export default{
     components: { ASButton },
@@ -10,6 +11,7 @@ export default{
             getList()
         })
 
+        const router = Router;
         const records = ref<object>([])
 
         let columns: Array<object> = [
@@ -33,30 +35,35 @@ export default{
             return test.data
         }
 
+        async function add() : Promise<AxiosResponse<any>>{
+            await router.push('airline-edit/00000000-0000-0000-0000-000000000000')
+        }
+
         return {
             columns,
             records,
-            getList
+            getList,
+            add,
         }
     }
 }
 </script>
 
 <template>
-  <div class="airlines_view">
-      <div class="airlines_view__toolbar">
-          <ASButton @clickOne="getList">Add</ASButton>
+  <div class="airlines-view">
+      <div class="airlines-view__toolbar">
+          <ASButton @clickOne="add">Add</ASButton>
       </div>
       <div class="table-div">
           <table class="table">
               <thead class="sticky-header">
-              <tr class="rounded-lg back-gray">
-                  <th class="table_columns__col" v-bind:class = "column.size" v-for="column in columns">{{ column.text }}</th>
-              </tr>
+                 <tr class="rounded-lg back-gray">
+                    <th class="table-columns__col" v-bind:class = "column.size" v-for="column in columns">{{ column.text }}</th>
+                </tr>
               </thead>
               <tbody>
-              <tr class="table_columns__row" v-for="record in records">
-                  <td class="table_columns__cell" v-for="column in columns">{{ record[column.value] }}</td>
+              <tr class="table-columns__row" v-for="record in records">
+                  <td class="table-columns__cell" v-for="column in columns">{{ record[column.value] }}</td>
               </tr>
               </tbody>
           </table>
@@ -67,11 +74,11 @@ export default{
 <style scoped>
 @import "src/assets/base.css";
 
-.airlines_view {
+.airlines-view {
   @apply p-5 h-full grid grid-rows-[1fr_10fr];
 }
 
-.airlines_view__toolbar{
+.airlines-view__toolbar{
     @apply flex text-2xl text-black
 }
 
@@ -84,16 +91,16 @@ export default{
     overflow-y: auto
 }
 
-.table_columns__col {
-    @apply p-2 m-2 border-r-2  border-black;
+.table-columns__col {
+    @apply p-2 m-2 border-r-2  border-black text-left;
 }
 
-.table_columns__row {
+.table-columns__row {
     @apply p-2 m-2 border-2;
 }
 
-.table_columns__cell {
-    @apply p-2 m-2 border-2;
+.table-columns__cell {
+    @apply p-2 m-2;
 }
 
 .sticky-header {

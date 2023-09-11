@@ -4,7 +4,7 @@
 
 <template>
   <div class="aircrafts_view">
-      <img style="max-height:100%; max-width:100%;" src="public/LOGO.svg" alt="logo">
+      <img style="max-height:100%; max-width:100%;" src="LOGO.svg" alt="logo">
       <h6 class="logo-place__header">AirSystem</h6>
   </div>
 </template>
