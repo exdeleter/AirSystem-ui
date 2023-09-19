@@ -3,9 +3,10 @@ import axios, {AxiosInstance, AxiosResponse} from "axios";
 import ASButton from "@/components/ASButton.vue";
 import {onMounted, ref} from 'vue';
 import Router from "@/router";
+import ASTable from "@/components/ASTable.vue";
 
 export default{
-    components: { ASButton },
+    components: {ASTable, ASButton },
     setup(){
         onMounted(() => {
             getList()
@@ -15,7 +16,7 @@ export default{
         const records = ref<object>([])
 
         let columns: Array<object> = [
-            { value: '', text: '', size: 'w-10'},
+            { value: 'edit', text: '', size: 'w-8'},
             { value: 'fullName', text: 'Full name'},
             { value: 'shortName', text: 'Short name'},
             { value: 'icaoCode', text: 'ICAO'},
@@ -38,12 +39,16 @@ export default{
         async function add() : Promise<AxiosResponse<any>>{
             await router.push('airline-edit/00000000-0000-0000-0000-000000000000')
         }
+        async function redirectToEdit(id) {
+            router.push({ path: `/airline-edit/${id}` })
+        }
 
         return {
             columns,
             records,
             getList,
             add,
+            redirectToEdit
         }
     }
 }
@@ -55,18 +60,13 @@ export default{
           <ASButton @clickOne="add">Add</ASButton>
       </div>
       <div class="table-div">
-          <table class="table">
-              <thead class="sticky-header">
-                 <tr class="rounded-lg back-gray">
-                    <th class="table-columns__col" v-bind:class = "column.size" v-for="column in columns">{{ column.text }}</th>
-                </tr>
-              </thead>
-              <tbody>
-              <tr class="table-columns__row" v-for="record in records">
-                  <td class="table-columns__cell" v-for="column in columns">{{ record[column.value] }}</td>
-              </tr>
-              </tbody>
-          </table>
+         <ASTable
+             :columns="columns"
+             :records="records"
+         >
+             <template #edit={id}><div @click="redirectToEdit(id)">Edit</div>
+             </template>
+         </ASTable>
       </div>
   </div>
 </template>
@@ -86,27 +86,5 @@ export default{
     @apply p-4 bg-white rounded-2xl overflow-y-auto;
     height: 100%;
 }
-.table {
-    @apply p-2 bg-white text-black w-full rounded-lg;
-    overflow-y: auto
-}
 
-.table-columns__col {
-    @apply p-2 m-2 border-r-2  border-black text-left;
-}
-
-.table-columns__row {
-    @apply p-2 m-2 border-2;
-}
-
-.table-columns__cell {
-    @apply p-2 m-2;
-}
-
-.sticky-header {
-    position: sticky;
-    top: 0;
-    background-color: white; /* Adjust as needed */
-    z-index: 1; /* Ensure header appears above scrolling content */
-}
 </style>
