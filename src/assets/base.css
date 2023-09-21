@@ -11,6 +11,10 @@
   .back-gray {
     background-color: #F7F3F3;
   }
+
+  .back-gray-100 {
+    background-color: #f6ecec;
+  }
 }
 
 :root {

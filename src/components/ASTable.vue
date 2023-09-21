@@ -13,11 +13,16 @@
     @apply p-2 m-2 border-b-2;
 }
 
+.table-columns__row:nth-child(even) {
+    @apply p-2 m-2 border-b-2 back-gray-100;
+}
+
 .table-columns__cell {
     @apply p-2 m-2;
 }
 
 .sticky-header {
+    @apply rounded-lg back-gray;
     position: sticky;
     top: 0;
     z-index: 1; /* Ensure header appears above scrolling content */
@@ -28,7 +33,7 @@
     <div class="as-table">
         <div class="as-table">
             <table class="table">
-                <thead class="sticky-header rounded-lg back-gray">
+                <thead class="sticky-header ">
                 <tr>
                     <th class="table-columns__col" v-bind:class = "column.size" v-for="column in columns">{{ column.text }}</th>
                 </tr>

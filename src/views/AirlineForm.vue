@@ -3,7 +3,6 @@ import axios, {AxiosInstance} from "axios";
 import ASButton from "@/components/ASButton.vue";
 import {onMounted, ref} from 'vue';
 import ASInput from "@/components/ASInput.vue";
-import Router from "@/router";
 
 export default{
     components: {ASInput, ASButton },
@@ -16,15 +15,6 @@ export default{
     setup(props){
         const record = ref({});
         const records = ref<object>([])
-        const router = Router;
-        let columns: Array<object> = [
-            { value: '', text: '', size: 'w-10'},
-            { value: 'fullName', text: 'Full name'},
-            { value: 'shortName', text: 'Short name'},
-            { value: 'icaoCode', text: 'ICAO'},
-            { value: 'iataCode', text: 'IATA'},
-            { value: 'website', text: 'Website'},
-            { value: 'logo', text: 'Logo'}];
 
         const cities = ref<object>([]);
 
@@ -35,9 +25,8 @@ export default{
 
         onMounted(async () => {
             if (props.id != "00000000-0000-0000-0000-000000000000") {
-                const res = await apiClient.get(`/${this.$route.params.id}`);
-                debugger;
-
+                const res = await apiClient.get(`/${props.id}`);
+                record.value = res.data
             }
 
             const apiClientCity: AxiosInstance = axios.create({
@@ -51,7 +40,25 @@ export default{
         })
 
         async function send() {
-            const response = await apiClient.post('', {
+            if (record.value.id && record.value.id != "00000000-0000-0000-0000-000000000000") {
+                await apiClient.put('', {
+                    "shortName": record.value?.shortName,
+                    "fullName": record.value?.fullName,
+                    "icaoCode":  record.value?.icaoCode,
+                    "iataCode":  record.value?.iataCode,
+                    "website": record.value?.website,
+                    "callSign": record.value?.callSign,
+                    "logoUrl": record.value?.logoUrl,
+                    "cityId": record.value?.cityId,
+                    "id": record.value?.id
+                })
+
+                alert(`Запись с идентификатором ${record.value.id} успешно обновлена.`)
+
+                return;
+            }
+
+            await apiClient.post('', {
                 "shortName": record.value?.shortName,
                 "fullName": record.value?.fullName,
                 "icaoCode":  record.value?.icaoCode,
@@ -62,7 +69,7 @@ export default{
                 "cityId": record.value?.cityId,
             })
 
-            alert(JSON.stringify(response.data))
+            alert(`Запись с идентификатором ${record.value.id} успешно сохранена.`)
         }
 
         function updatedrp(item){
@@ -71,7 +78,6 @@ export default{
         }
 
         return {
-            columns,
             records,
             record,
             send,

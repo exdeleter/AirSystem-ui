@@ -23,9 +23,7 @@ const router = createRouter({
     {
       path: '/airline-edit/:id',
       component: AirlineForm,
-      props : {
-        id : "00000000-0000-0000-0000-000000000000"
-      }
+      props: true
     }
   ]
 })
