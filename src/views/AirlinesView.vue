@@ -4,9 +4,18 @@ import ASButton from "@/components/ASButton.vue";
 import {onMounted, ref} from 'vue';
 import Router from "@/router";
 import ASTable from "@/components/ASTable.vue";
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiPencil } from '@mdi/js';
+import { mdiCloseCircle  } from '@mdi/js';
 
 export default{
-    components: {ASTable, ASButton },
+    components: {
+        ASTable,
+        ASButton,
+        SvgIcon,
+        mdiPencil,
+        mdiCloseCircle
+    },
     setup(){
         onMounted(() => {
             getList()
@@ -22,7 +31,8 @@ export default{
             { value: 'icaoCode', text: 'ICAO'},
             { value: 'iataCode', text: 'IATA'},
             { value: 'website', text: 'Website'},
-            { value: 'logo', text: 'Logo'}];
+            { value: 'logo', text: 'Logo'},
+            { value: 'remove', text: '', size: 'w-8'}];
 
         const apiClient: AxiosInstance = axios.create({
             baseURL: `https://localhost:44352/api/Airline`,
@@ -43,12 +53,25 @@ export default{
             router.push({ path: `/airline-edit/${id}` })
         }
 
+        async function remove(id) {
+            const test = await apiClient.delete('', {
+                params: {
+                    id: id
+                }
+            })
+
+            alert(`Запись с идентификатором: ${id} успешно удалена`);
+            await getList()
+        }
+
         return {
             columns,
             records,
-            getList,
             add,
-            redirectToEdit
+            redirectToEdit,
+            mdiPencil,
+            mdiCloseCircle,
+            remove
         }
     }
 }
@@ -59,15 +82,19 @@ export default{
       <div class="airlines-view__toolbar">
           <ASButton @clickOne="add">Add</ASButton>
       </div>
-      <div class="table-div">
-         <ASTable
-             :columns="columns"
-             :records="records"
-         >
-             <template #edit={id}><div @click="redirectToEdit(id)">Edit</div>
-             </template>
-         </ASTable>
-      </div>
+       <ASTable
+           :columns="columns"
+           :records="records"
+       >
+           <template #edit={id}><div @click="redirectToEdit(id)">
+               <SvgIcon type="mdi" :path="mdiPencil"></SvgIcon>
+           </div>
+           </template>
+           <template #remove={id}><div @click="remove(id)">
+               <SvgIcon type="mdi" :path="mdiCloseCircle"></SvgIcon>
+           </div>
+           </template>
+       </ASTable>
   </div>
 </template>
 
@@ -81,10 +108,4 @@ export default{
 .airlines-view__toolbar{
     @apply flex text-2xl text-black
 }
-
-.table-div {
-    @apply p-4 bg-white rounded-2xl overflow-y-auto;
-    height: 100%;
-}
-
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 import axios, {AxiosInstance} from "axios";
 import ASButton from "@/components/ASButton.vue";
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import ASInput from "@/components/ASInput.vue";
 
 export default{
@@ -77,12 +77,34 @@ export default{
             record.value.city = item
         }
 
+        const test = ref<object>();
+
+        watch(
+            () => record.value?.city?.name,
+            async (newVal, oldVal) => {
+            const apiClientCity: AxiosInstance = axios.create({
+                baseURL: `https://localhost:44352/api/City`,
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const test = await apiClientCity.get('/params',
+                { params:
+                        {
+                            name: oldVal
+                        }
+                }
+            )
+
+            cities.value = test.data
+        })
+
         return {
             records,
             record,
             send,
             cities,
-            updatedrp
+            updatedrp,
+            test
         }
     }
 }
@@ -131,9 +153,12 @@ export default{
               @update:modelValue="newValue => record.website = newValue"
       />
     <div class="dropdown">
-        <input :value="record?.city?.name" class="dropbtn" placeholder="Город" >
+        <input :value="record?.city?.name" class="dropbtn" placeholder="Город" @input="record.city = { name: $event.target.value}">
         <div class="dropdown-content">
-            <a v-for="city in cities" @click="updatedrp(city)">{{ city.name }}</a>
+            <a v-for="city in cities"
+               @click="updatedrp(city)"
+
+            >{{ city.name }}</a>
         </div>
     </div>
     <ASButton @clickOne="send">Add</ASButton>
@@ -156,7 +181,7 @@ export default{
 
 /* Контейнер <div> - необходим для размещения выпадающего содержимого */
 .dropdown {
-    position: relative;
+    @apply m-2 p-2 border-2 border-slate-600 rounded-lg;
     display: inline-block;
 }
 
