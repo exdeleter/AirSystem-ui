@@ -47,14 +47,14 @@ export default{
         }
 
         async function add() : Promise<AxiosResponse<any>>{
-            await router.push('airline-edit/00000000-0000-0000-0000-000000000000')
+            await router.push('Airlines/00000000-0000-0000-0000-000000000000')
         }
         async function redirectToEdit(id) {
-            router.push({ path: `/airline-edit/${id}` })
+            router.push({ path: `Airlines/${id}` })
         }
 
         async function remove(id) {
-            const test = await apiClient.delete('', {
+            await apiClient.delete('', {
                 params: {
                     id: id
                 }

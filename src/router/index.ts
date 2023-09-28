@@ -10,6 +10,13 @@ const router = createRouter({
       meta: {
         title: "Select style",
       },
+      path: "/",
+      component: AircraftsView, //TODO change on dashboard
+    },
+    {
+      meta: {
+        title: "Select style",
+      },
       path: "/Aircrafts",
       component: AircraftsView,
     },
@@ -21,7 +28,7 @@ const router = createRouter({
       component: AirlinesView,
     },
     {
-      path: '/airline-edit/:id',
+      path: '/Airlines/:id',
       component: AirlineForm,
       props: true
     }
