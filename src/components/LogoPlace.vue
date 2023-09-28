@@ -4,7 +4,7 @@
 
 <template>
   <div class="logo-place">
-      <img style="max-height:100%; max-width:100%;" src="public/LOGO.svg" alt="logo">
+      <img style="max-height:100%; max-width:100%;" src="/LOGO.svg" alt="logo">
       <h6 class="logo-place__header">AirSystem</h6>
   </div>
 </template>
@@ -13,7 +13,7 @@
 @import "src/assets/base.css";
 
 .logo-place {
-    @apply back items-center flex pl-5 py-2 border-r-2 border-gray-500;
+    @apply back items-center flex pl-5 py-2 border-color-main border-r-2;
     color: black;
     width: 100%;
     height: 10vh;

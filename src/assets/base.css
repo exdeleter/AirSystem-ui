@@ -15,6 +15,11 @@
   .back-gray-100 {
     background-color: #f6ecec;
   }
+
+  .border-color-main {
+    @apply border-gray-500
+  }
+
 }
 
 :root {

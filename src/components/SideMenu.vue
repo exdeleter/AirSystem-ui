@@ -2,7 +2,7 @@
 @import "src/assets/base.css";
 
 .side-menu {
-    @apply back border-r-2 border-t-2 border-gray-500;
+    @apply back border-color-main border-2;
     color: black;
     width: 100%;
     height: 90vh;
