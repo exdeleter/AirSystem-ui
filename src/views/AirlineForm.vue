@@ -3,6 +3,7 @@ import axios, {AxiosInstance} from "axios";
 import ASButton from "@/components/ASButton.vue";
 import {onMounted, ref, watch} from 'vue';
 import ASInput from "@/components/ASInput.vue";
+import useAirlineStore from "@/stores/useStore";
 
 export default{
     components: {ASInput, ASButton },
@@ -13,20 +14,16 @@ export default{
         }
     },
     setup(props){
+        const store = useAirlineStore();
+
         const record = ref({});
         const records = ref<object>([])
 
         const cities = ref<object>([]);
 
-        const apiClient: AxiosInstance = axios.create({
-            baseURL: `https://localhost:44352/api/Airline`,
-            headers: { 'Content-Type': 'application/json' }
-        });
-
         onMounted(async () => {
             if (props.id != "00000000-0000-0000-0000-000000000000") {
-                const res = await apiClient.get(`/${props.id}`);
-                record.value = res.data
+                await store.get(props.id)
             }
 
             const apiClientCity: AxiosInstance = axios.create({
@@ -40,36 +37,7 @@ export default{
         })
 
         async function send() {
-            if (record.value.id && record.value.id != "00000000-0000-0000-0000-000000000000") {
-                await apiClient.put('', {
-                    "shortName": record.value?.shortName,
-                    "fullName": record.value?.fullName,
-                    "icaoCode":  record.value?.icaoCode,
-                    "iataCode":  record.value?.iataCode,
-                    "website": record.value?.website,
-                    "callSign": record.value?.callSign,
-                    "logoUrl": record.value?.logoUrl,
-                    "cityId": record.value?.cityId,
-                    "id": record.value?.id
-                })
-
-                alert(`Запись с идентификатором ${record.value.id} успешно обновлена.`)
-
-                return;
-            }
-
-            await apiClient.post('', {
-                "shortName": record.value?.shortName,
-                "fullName": record.value?.fullName,
-                "icaoCode":  record.value?.icaoCode,
-                "iataCode":  record.value?.iataCode,
-                "website": record.value?.website,
-                "callSign": record.value?.callSign,
-                "logoUrl": record.value?.logoUrl,
-                "cityId": record.value?.cityId,
-            })
-
-            alert(`Запись с идентификатором ${record.value.id} успешно сохранена.`)
+            await store.send()
         }
 
         function updatedrp(item){
@@ -100,11 +68,12 @@ export default{
 
         return {
             records,
-            record,
+            record : store.record,
             send,
             cities,
             updatedrp,
-            test
+            test,
+            store
         }
     }
 }
@@ -114,51 +83,45 @@ export default{
   <div class="airline-form">
       <div class="grid grid-cols-2">
           <ASInput
-              :modelValue="record.shortName"
+              v-model="record.shortName"
               text="Short Name"
-              @update:modelValue="newValue => record.shortName = newValue"
           />
-
           <ASInput
-              :modelValue="record.fullName"
+              v-model="record.fullName"
               text="Full Name"
-              @update:modelValue="newValue => record.fullName = newValue"
           />
-
           <ASInput
-              :modelValue="record.iataCode"
+              v-model="record.iataCode"
               text="IATA"
-              @update:modelValue="newValue => record.iataCode = newValue"
           />
-
           <ASInput
-              :modelValue="record.icaoCode"
+              v-model="record.icaoCode"
               text="ICAO"
-              @update:modelValue="newValue => record.icaoCode = newValue"
           />
           <ASInput
-              :modelValue="record.callSign"
+              v-model="record.callSign"
               text="Callsign"
-              @update:modelValue="newValue => record.callSign = newValue"
           />
           <ASInput
-              :modelValue="record.logoUrl"
+              v-model="record.logoUrl"
               text="Logo URL"
-              @update:modelValue="newValue => record.logoUrl = newValue"
           />
       </div>
       <ASInput
-              :modelValue="record.website"
-              text="Website"
-              @update:modelValue="newValue => record.website = newValue"
+          v-model="record.website"
+          text="Website"
       />
     <div class="dropdown">
-        <input :value="record?.city?.name" class="dropbtn" placeholder="Город" @input="record.city = { name: $event.target.value}">
+        <input :value="record?.city?.name"
+               class="dropbtn"
+               placeholder="Город"
+               @input="record.city = { name: $event.target.value}">
         <div class="dropdown-content">
-            <a v-for="city in cities"
+            <div v-for="city in cities"
                @click="updatedrp(city)"
-
-            >{{ city.name }}</a>
+            >
+                {{ city.name }}
+            </div>
         </div>
     </div>
     <ASButton @clickOne="send">Add</ASButton>
@@ -174,13 +137,8 @@ export default{
 
 /* Кнопка выпадающего списка */
 .dropbtn {
+    @apply border-2;
     padding: 16px;
-    font-size: 16px;
-    border: none;
-}
-
-/* Контейнер <div> - необходим для размещения выпадающего содержимого */
-.dropdown {
     @apply m-2 p-2 border-2 border-slate-600 rounded-lg;
     display: inline-block;
 }
@@ -191,12 +149,13 @@ export default{
     position: absolute;
     background-color: #f1f1f1;
     min-width: 160px;
+    max-width: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
 /* Ссылки внутри выпадающего списка */
-.dropdown-content a {
+.dropdown-content div {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
@@ -204,12 +163,14 @@ export default{
 }
 
 /* Изменение цвета выпадающих ссылок при наведении курсора */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content div:hover {background-color: #ddd;}
 
 /* Показать выпадающее меню при наведении курсора */
 .dropdown:hover .dropdown-content {display: block;}
 
 /* Изменение цвета фона кнопки раскрывающегося списка при отображении содержимого раскрывающегося списка */
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.dropdown:hover .dropbtn {
+    @apply border-4
+}
 
 </style>

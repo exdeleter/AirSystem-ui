@@ -5,15 +5,19 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-function update(value) {
-    emit("update", value)
+function updateModelValue(value) {
+    emit("update:modelValue", value)
 }
 </script>
 
 <template>
     <div class="as-input">
         <p class="as-input__placeholder">{{ text }}</p>
-        <input class="as-input__input" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)">
+        <input
+            class="as-input__input"
+            :value="modelValue"
+            @input="updateModelValue($event.target.value)"
+        />
     </div>
 </template>
 
@@ -21,7 +25,7 @@ function update(value) {
 @import "src/assets/base.css";
 
 .as-input {
-    @apply m-2 p-2 border-2 border-slate-600 rounded-lg;
+    @apply m-2 p-2 border-2 border-gray-500 rounded-lg;
 }
 
 .as-input__placeholder {
@@ -29,6 +33,11 @@ function update(value) {
 }
 
 .as-input__input {
-    @apply w-full focus:outline-none focus:ring focus:border-blue-500;
+    @apply w-full focus:outline-none;
 }
+
+.as-input:focus-within {
+    @apply border-blue-700
+}
+
 </style>
