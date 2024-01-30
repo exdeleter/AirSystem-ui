@@ -41,14 +41,14 @@ export default{
         }
 
         function updatedrp(item){
-            record.value.cityId = item.id;
-            record.value.city = item
+            store.record.value.cityId = item.id;
+            store.record.value.city = item
         }
 
         const test = ref<object>();
 
         watch(
-            () => record.value?.city?.name,
+            () => store.record.value?.city?.name,
             async (newVal, oldVal) => {
             const apiClientCity: AxiosInstance = axios.create({
                 baseURL: `https://localhost:44352/api/City`,
@@ -81,6 +81,7 @@ export default{
 
 <template>
   <div class="airline-form">
+      <ASButton @clickOne="send">Add</ASButton>
       <div class="grid grid-cols-2">
           <ASInput
               v-model="record.shortName"
@@ -124,7 +125,7 @@ export default{
             </div>
         </div>
     </div>
-    <ASButton @clickOne="send">Add</ASButton>
+
   </div>
 </template>
 

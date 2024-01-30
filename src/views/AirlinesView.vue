@@ -21,6 +21,8 @@ export default{
             getList()
         })
 
+        const isVisible = ref<boolean>(false);
+
         const router = Router;
         const records = ref<object>([])
 
@@ -54,14 +56,22 @@ export default{
         }
 
         async function remove(id) {
-            await apiClient.delete('', {
-                params: {
-                    id: id
-                }
-            })
+            isVisible.value = true;
+        }
 
-            alert(`Запись с идентификатором: ${id} успешно удалена`);
-            await getList()
+        async function action(value, id) {
+            if (value) {
+                await apiClient.delete('', {
+                    params: {
+                        id: id
+                    }
+                })
+
+                alert(`Запись с идентификатором: ${id} успешно удалена`);
+                isVisible.value = true;
+                await getList()
+            }
+
         }
 
         return {
@@ -71,7 +81,9 @@ export default{
             redirectToEdit,
             mdiPencil,
             mdiCloseCircle,
-            remove
+            remove,
+            isVisible,
+            action
         }
     }
 }
@@ -96,6 +108,16 @@ export default{
            </template>
        </ASTable>
   </div>
+  <div class="modal" v-if="isVisible">
+      <div class="modal__body">
+          <p>Are you sure want to delete record?</p>
+          <div class="modal__body__button">
+              <ASButton @click="emit(false)">Yes</ASButton>
+              <ASButton>No</ASButton>
+          </div>
+      </div>
+
+  </div>
 </template>
 
 <style scoped>
@@ -107,5 +129,34 @@ export default{
 
 .airlines-view__toolbar{
     @apply flex text-2xl text-black
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #cececeb5;
+}
+
+.modal__body {
+    @apply p-2 bg-white text-black;
+    border: 2px solid #74a2cf;
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px 40px;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal__body__button{
+    display: flex;
+    justify-content: space-between
 }
 </style>
